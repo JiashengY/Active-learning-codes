@@ -3,7 +3,7 @@
 # Active-learning-codes
 This repository is linked to the research article J. Yang, A. Stroh, S. Lee, S. Bagheri, B. Frohnapfel and P. Forooghi. (2023) Prediction of equivalent sand-grain size and identification of drag-relevant scales of roughness - a data driven approach <em>JFM</em>.
 
-[![PS_PDF_NeuralNetwork](0_assets/NN.png)](https://arxiv.org/abs/2304.08958)
+[![PS_PDF_NeuralNetwork](0_assets/NN.PNG)](https://arxiv.org/abs/2304.08958)
 
 <!-- TABLE OF CONTENTS -->
 <details>
