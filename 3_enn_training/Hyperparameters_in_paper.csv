@@ -1,0 +1,2 @@
+n_neurons_0;n_neurons_1;n_neurons_2;activation;lr;regularization
+64;128;32;relu;0.001;0.003
