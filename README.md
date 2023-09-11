@@ -122,7 +122,7 @@ The **rgh** class calculates following attributes automatically once the instanc
 * **krms** : Standard diviation of roughness height $\sqrt{{1\over S}\int_{x,z}(k-k_{md})^2\text{d}S}$
 * **kmd** : Melt-down height of roughness, measuring bottom ${1\over S} \int_{x,z}k\text{d}A$
 * **ra** : Mean absolute diviation of roughness height around the mean plane ${1\over S}\int_{x,z}|k-k_{md}|\text{d}S$
-* **por** : Porosity of the roughness within the roughness region, *i.e.* $y<k_t$
+* **por** : Porosity of the roughness within the roughness region
 * **ESx** **ESz** : Effective slope in streamwise and spanwise directions, respectively ${1\over S}\int_{x,z}|{\partial k \over \partial x,z}|\text{d}S$
 * **incx** **incz** : Inclination of roughness in streamwise and spanwise directions, respectively $\text{tan}^{-1}\{{1\over 2}Sk({\partial k \over \partial x,z})\}$
 ### Methods
