@@ -113,12 +113,23 @@ Create an instance of the rgh class:
 ```python 
 surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinate, y is 2-D roughness map
 ```
-
+### Attributes
+The **rgh** class calculates following attributes automatically once the instance is asigned:
+* **Lx**, **Lz** : Streamwise and spanwise extents of the roughness patch, respectively.
+* **kt** : Peak-to-trough height of the roughness
+* **sk** : Skewness of the roughness PDF ${1\over Sk_{rms}^3}\int_S(k-k_{md}^3)\text{d}S$, where 
+* **ku** : Kurtosis of the roughness PDF with Pearson's definition ${1\over Sk_{rms}^4}\int_S(k-k_{md}^4)\text{d}S$
+* **krms** : Standard diviation of roughness height $\sqrt{{1\over S}\int_{x,z}(k-k_{md})^2\text{d}S}$
+* **kmd** : Melt-down height of roughness, measuring bottom ${1\over S} \int_{x,z}k\text{d}A$
+* **ra** : Mean absolute diviation of roughness height around the mean plane ${1\over S}\int_{x,z}|k-k_{md}|\text{d}S$
+* **por** : Porosity of the roughness within the roughness region, *i.e.* $y<k_t$
+* **ESx** **ESz** : Effective slope in streamwise and spanwise directions, respectively ${1\over S}\int_{x,z}|{\partial k \over \partial x,z}|\text{d}S$
+* **incx** **incz** : Inclination of roughness in streamwise and spanwise directions, respectively $\text{tan}^{-1}\{{1\over 2}Sk({\partial k \over \partial x,z})\}$
 ### Methods
 The **rgh** class provides the following methods:
 * **print_stat()** : Generate a dictionary containing roughness statistical parameters
 * **show_surface(representation="2D")** : Plot surface geometry.
-  * **representation** : String, shoing the representation of roughness geometry either in "2D" or "3D".
+  * **representation** : String, showing the representation of roughness geometry either in "2D" or "3D".
 * **plot_PDF(n_bins=10,Normalization=True)** : Present roughness height PDF, where:
   * **n_bins**: integer, number of bins. 
   * **Normalization** : boolean, if the plot is noramalized to density.
