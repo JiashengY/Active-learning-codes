@@ -8,8 +8,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as sps
 import pandas as pd
+import time
 from tkinter import filedialog
 from tensorflow.keras.models import load_model
+import multiprocessing as mp
 plt.rcParams['text.usetex'] = True
 from scipy.interpolate import RegularGridInterpolator
 class rgh():
@@ -53,6 +55,25 @@ class rgh():
         self.incz=np.arctan(sps.skew((np.roll(ynew,1,axis=1)-ynew)/self.dz,axis=None)/2)
         self.PS=np.fft.fft2(ynew-np.mean(ynew))## Cautions: this is not PS
 
+###### Calculating k99
+        surface=self.y-np.min(self.y)
+        
+        self.n99,self.bin99=np.histogram(surface.reshape((-1)),density=True,bins=100)
+        self.bin99=(self.bin99[1:]+self.bin99[:-1])/2
+        C_I=0.01
+        flag=0
+        for i in range(len(self.n99)):
+            s=np.sum(self.n99[:i])/np.sum(self.n99)
+            if (s>C_I/2) & (flag==0):
+                LBound=self.bin99[i]
+                flag=1
+            if (s>1-C_I/2) & (flag==1):
+                UBound=self.bin99[i]
+                break
+        
+        
+        self.k99=UBound-LBound
+
     def show_surface(self,representation="2D"): ## Plotting surface
         if representation =="2D":
             plt.imshow(self.y,extent=[self.x.min(),self.x.max(),self.z.min(),self.z.max()])
@@ -73,8 +94,8 @@ class rgh():
 
     def print_stat(self): ## Outputing roughness statistical parameters as a table
         return pd.DataFrame({"Length":[self.Lx],"Width":[self.Lz],"Sk":[self.sk],"Ku":self.ku,"k_RMS":self.krms,"k_md":self.kmd,
-                "kt":[self.kt],"Ra":[self.ra],"Por":[self.por],"ES_x":[self.ESx],
-                "ES_z":[self.ESz],"Inc_x":[self.incx],"Inc_z":[self.incz]})
+                "kt":[self.kt],"k99":[self.k99],"Ra":[self.ra],"Por":[self.por],"ES_x":[self.ESx],
+                "ES_z":[self.ESz],"Inc_x":[self.incx],"Inc_z":[self.incz]}).style.hide(axis='index')
     
 
     def plot_PDF(self,n_bins=10,Normalization=True): ## Plotting roughness PDF with desired number of bins
@@ -209,27 +230,11 @@ class rgh():
         
 
 
-    def get_model_input(self,lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3):
+    def get_model_input(self,lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3,do_plots=False):
         surface=self.y-np.min(self.y)
-        
-        n99,bin99=np.histogram(surface.reshape((-1)),density=True,bins=100)
-        bin99=(bin99[1:]+bin99[:-1])/2
-        C_I=0.01
-        flag=0
-        for i in range(len(n99)):
-            s=np.sum(n99[:i])/np.sum(n99)
-            if (s>C_I/2) & (flag==0):
-                LBound=bin99[i]
-                flag=1
-            if (s>1-C_I/2) & (flag==1):
-                UBound=bin99[i]
-                break
-        
-        
-        k99=UBound-LBound
         # lambda values for output, normalized by k99
-        lambda_0=lmax/k99
-        lambda_1=lmin/k99
+        lambda_0=lmax/self.k99
+        lambda_1=lmin/self.k99
 
 
         # convert to same unit 
@@ -328,11 +333,12 @@ class rgh():
         Qquerys=10**np.linspace(np.log10(q0),np.log10(q1),30)
         PSquerys=np.zeros(len(Qquerys))
         PSquerys[0]=PS_toplot_1d[q_radius_1d>Qquerys[0]][0]
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        ax.scatter(q_radius_1d, PS_toplot_1d,c='k',marker="*")
-        ax.set_yscale('log')
-        ax.set_xscale('log')
+        if do_plots==True:
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            ax.scatter(q_radius_1d, PS_toplot_1d,c='k',marker="*")
+            ax.set_yscale('log')
+            ax.set_xscale('log')
         # Interpolating PS values
         for i in range(1,len(Qquerys)):
             PSright=PS_toplot_1d[q_radius_1d>Qquerys[i]][0]
@@ -341,29 +347,55 @@ class rgh():
             Qleft=q_radius_1d[q_radius_1d<Qquerys[i]][-1]
             PSquerys[i]=PSleft+(PSright-PSleft)*(Qquerys[i]-Qleft)/(Qright-Qleft)
         ## Plotting the used PS values 
-        ax.scatter(Qquerys, PSquerys,c='r',marker="o")
+        if do_plots==True:
+            ax.scatter(Qquerys, PSquerys,c='r',marker="o")
         PSquerys=np.log10(PSquerys)
 
         surface_kt=surface/np.max(surface)
         n0,bin0 = np.histogram(surface_kt.reshape((1,-1)), density=True,bins=30)
         bin0=(bin0[1:]+bin0[:-1])/2
+        if do_plots==True:
+            fig2 = plt.figure()
+            ax2 = fig2.add_subplot(1, 1, 1)
+            ax2.plot(self.bin99/np.max(self.bin99), self.n99*self.kt,c='k')
+            ax2.scatter(bin0,n0,marker="o",c="r")
 
-        fig2 = plt.figure()
-        ax2 = fig2.add_subplot(1, 1, 1)
-        ax2.plot(bin99/np.max(bin99), n99*self.kt,c='k')
-        ax2.scatter(bin0,n0,marker="o",c="r")
+        return np.concatenate((np.array([self.kt/self.k99,lambda_0,lambda_1]),n0,PSquerys),axis=None)
+def single_predict(file_path,model_num,Input):
+    Model=load_model(file_path+"/model"+str(model_num))
+    return Model.predict(Input.reshape(1,-1),verbose=0)
 
-        return np.concatenate((np.array([self.kt/k99,lambda_0,lambda_1]),n0,PSquerys),axis=None)
+def collect_prediction(output):
+    global predict_train
+    predict_train.append(output)
 
-def predict(surface_input,n_models=50):
+def predict(surface_input,n_models=50,n_p=4):
     # Select root folder of the model members
     file_path = filedialog.askdirectory()
+    pool=mp.Pool(n_p)
+    global predict_train
     predict_train=[]
-    ## predict one-by-one
+    st=time.time()
+
+    ## Asynchronous predictions
     for i in range(n_models):
-        Model=load_model(file_path+"/model"+str(i))
-        predict_train.append(Model.predict(surface_input))
+        pool.apply_async(single_predict, args=(file_path,i,surface_input.reshape(1,-1)), callback=collect_prediction)
+    pool.close()
+    pool.join()
+    ## Synchronous predictions
+    #predict_train=[pool.apply(single_predict, args=(file_path,i,surface_input.reshape(1,-1))) for i in range(n_models)]
+
+
+    ## predict one-by-one
+    #for i in range(n_models):
+    #    Model=load_model(file_path+"/model"+str(i))
+    #    predict_train.append(Model.predict(surface_input.reshape(1,-1),verbose=0))
+    et=time.time()
+    pool.close()
+    executionT=et-st
+    print("\n Execution time:"+str(np.round(executionT,2)))
     predict_train=np.array(predict_train)
     predict_uncertainty=np.std(predict_train)
     prediction=np.mean(predict_train)
+    print("\n Predicted ks/k99="+str(np.round(prediction,2)))
     return prediction,predict_uncertainty

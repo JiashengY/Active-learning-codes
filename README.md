@@ -117,6 +117,7 @@ surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinate, y is 2-D rough
 The **rgh** class calculates following attributes automatically once the instance is asigned:
 * **Lx**, **Lz** : Streamwise and spanwise extents of the roughness patch, respectively.
 * **kt** : Peak-to-trough height of the roughness
+* **k99** : 99% confidence interval of roughness PDF
 * **sk** : Skewness of the roughness PDF ${1\over Sk_{rms}^3}\int_S(k-k_{md})^3\text{d}S$, where 
 * **ku** : Kurtosis of the roughness PDF with Pearson's definition ${1\over Sk_{rms}^4}\int_S(k-k_{md})^4\text{d}S$
 * **krms** : Standard diviation of roughness height $\sqrt{{1\over S}\int_{x,z}(k-k_{md})^2\text{d}S}$
@@ -147,11 +148,11 @@ The **rgh** class provides the following methods:
   * **n_iter**: number of moving averaging iterations.
 
 ### Roughness prediction
-**predict(surface_input,n_models=50)** is the function to predict given inputs with the ensemble neural network.
+**predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
 * **surface_input** is the input vector for the current model, this can be obtained by **get_model_input** method in **rgh** class. For instance:
 
 ```python
-prediction=rgh.predict(surface.get_model_input())
+prediction=rgh.predict(surface.get_model_input(),n_p=mp.cpu_count())
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
