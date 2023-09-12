@@ -152,6 +152,7 @@ The **rgh** class provides the following methods:
 * **surface_input** is the input vector for the current model, this can be obtained by **get_model_input** method in **rgh** class. For instance:
 
 ```python
+import multiprocessing as mp
 prediction=rgh.predict(surface.get_model_input(),n_p=mp.cpu_count())
 ```
 
