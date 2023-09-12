@@ -117,8 +117,8 @@ surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinate, y is 2-D rough
 The **rgh** class calculates following attributes automatically once the instance is asigned:
 * **Lx**, **Lz** : Streamwise and spanwise extents of the roughness patch, respectively.
 * **kt** : Peak-to-trough height of the roughness
-* **sk** : Skewness of the roughness PDF ${1\over Sk_{rms}^3}\int_S(k-k_{md}^3)\text{d}S$, where 
-* **ku** : Kurtosis of the roughness PDF with Pearson's definition ${1\over Sk_{rms}^4}\int_S(k-k_{md}^4)\text{d}S$
+* **sk** : Skewness of the roughness PDF ${1\over Sk_{rms}^3}\int_S(k-k_{md})^3\text{d}S$, where 
+* **ku** : Kurtosis of the roughness PDF with Pearson's definition ${1\over Sk_{rms}^4}\int_S(k-k_{md})^4\text{d}S$
 * **krms** : Standard diviation of roughness height $\sqrt{{1\over S}\int_{x,z}(k-k_{md})^2\text{d}S}$
 * **kmd** : Melt-down height of roughness, measuring bottom ${1\over S} \int_{x,z}k\text{d}A$
 * **ra** : Mean absolute diviation of roughness height around the mean plane ${1\over S}\int_{x,z}|k-k_{md}|\text{d}S$
