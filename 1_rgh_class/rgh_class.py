@@ -51,7 +51,7 @@ class rgh():
         self.ESz=np.mean(np.abs((np.roll(ynew,1,axis=1)-ynew)/self.dz))
         self.incx=np.arctan(sps.skew((np.roll(ynew,1,axis=0)-ynew)/self.dx,axis=None)/2)
         self.incz=np.arctan(sps.skew((np.roll(ynew,1,axis=1)-ynew)/self.dz,axis=None)/2)
-        self.PS=np.fft.fft2(ynew-np.mean(ynew))
+        self.PS=np.fft.fft2(ynew-np.mean(ynew))## Cautions: this is not PS
 
     def show_surface(self,representation="2D"): ## Plotting surface
         if representation =="2D":
