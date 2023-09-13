@@ -1,7 +1,8 @@
 <a name="readme-top"></a>
 
 # Active-learning-codes
-This repository is linked to the research article J. Yang, A. Stroh, S. Lee, S. Bagheri, B. Frohnapfel and P. Forooghi. (2023) Prediction of equivalent sand-grain size and identification of drag-relevant scales of roughness - a data driven approach <em>JFM</em>.
+This repository is associated with the research article authored by J. Yang, A. Stroh, S. Lee, S. Bagheri, B. Frohnapfel, and P. Forooghi, titled "Prediction of Equivalent Sand-Grain Size and Identification of Drag-Relevant Scales of Roughness - A Data-Driven Approach," which was published in the *Journal of Fluid Mechanics* 2023.
+
 
 [![PS_PDF_NeuralNetwork](0_assets/NN.PNG)](https://arxiv.org/abs/2304.08958)
 
@@ -22,8 +23,8 @@ This repository is linked to the research article J. Yang, A. Stroh, S. Lee, S. 
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#Folders">Folders</a></li>
+    <li><a href="#usage">Usage</a></li>
     <li><a href="#citation">Citation</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#license">License</a></li>
@@ -32,8 +33,8 @@ This repository is linked to the research article J. Yang, A. Stroh, S. Lee, S. 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-The present project contains python scripts range from [reading roughness statistics](#rgh_category)
-,  [Bayesian optimization of NN architecture](#Bayesian_optimization) and [training of ensemble neural network](#enn_training) based on given architecture.
+
+The current project encompasses a collection of Python scripts, spanning tasks such as analyzing roughness statistics, performing Bayesian optimization for neural network architecture, and conducting ensemble neural network training using predefined architectures.
 
 
 
@@ -101,6 +102,18 @@ Clone the repository
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- Folders -->
+## Folders
+
+* #### rgh_class 
+This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
+* #### Bayesian_optimization
+This folder contains BO routine **NeuralNetwork_BO.ipynb** for optimizing NN archeticture for the current task setup. Output file <strong>Hyperparameters_BO.csv</strong>
+* #### enn_training
+This folder contains ENN training script **NeuralNetwork_train.ipynb** based on  user specified NN architecture documented in <strong>Hyperparameters.csv</strong>, either generated from BO process or user-defined. The trained ENN model members are stored in the folder **Models** at the same location.
+
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 ### rgh Python class
@@ -111,7 +124,7 @@ import rgh_class as rgh
 ```
 Create an instance of the rgh class:
 ```python 
-surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinate, y is 2-D roughness map
+surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinates, y is 2-D roughness map
 ```
 ### Attributes
 The **rgh** class calculates following attributes automatically once the instance is assigned:
@@ -128,7 +141,7 @@ The **rgh** class calculates following attributes automatically once the instanc
 * **incx** **incz** : Inclination of roughness in streamwise and spanwise directions, respectively $\text{tan}^{-1}({1\over 2}Sk({\partial k \over \partial x,z}))$
 ### Methods
 The **rgh** class provides the following methods:
-* **print_stat()** : Generate a dictionary containing roughness statistical parameters
+* **print_stat()** : Generate a table containing roughness statistical parameters
 * **show_surface(representation="2D")** : Plot surface geometry.
   * **representation** : String, showing the representation of roughness geometry either in "2D" or "3D".
 * **plot_PDF(n_bins=10,Normalization=True)** : Present roughness height PDF, where:
@@ -137,14 +150,14 @@ The **rgh** class provides the following methods:
 * **plot_PS(Normalization=True,circular_average=False,moving_average=False)**: Present roughness height PS, where:
   * **Normalization** : boolean, if the PS is noramalized with root-mean-square roughness height. 
   * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
-  * **moving_average=False**: Once ayimuthal average is done, moving average over 1-d PS can be carried out on demand. 
+  * **moving_average=False**: Once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
 * **FFT_filter(lmax,lmin)**: Spectral filtering of the surface, **lmax**, **lmin** are the desired largest and smallest roughness wavelengths, respectively.
-* **get_model_input(lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3)**: Generate input vector for the ML model, where:
+* **get_model_input(lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3)**: Generate input vector for the ML model proposed in the publication, where:
   * **lmax**: largest incorporated wavelength
   * **lmin**: smallest incorporated wavelength
   * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
-  * **moving_average=False**: Once ayimuthal average is done, moving average over 1-d PS can be carried out on demand. 
+  * **moving_average=False**: Once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
 
 ### Roughness prediction
@@ -155,18 +168,14 @@ The **rgh** class provides the following methods:
 import multiprocessing as mp
 prediction=rgh.predict(surface.get_model_input(),n_p=mp.cpu_count())
 ```
+You can choose the model for prediction from the pop-up window:
+<img src="0_assets/Model_select.PNG" alt= “Model_selection_window” width="600">
+
+
+### Code examples
+ Code example of applying **rgh** class can be found in the jupyter notbook **1_rgh_class/Class_Example.ipynb**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- Folders -->
-## Folders
-
-* #### rgh_class 
-This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
-* #### Bayesian_optimization
-This folder contains BO routine for optimizing NN archeticture for the current task setup. Output file <strong>Hyperparameters_BO.csv</strong>
-* #### enn_training
-This folder contains ENN training script based on  user specified NN architecture documented in <strong>Hyperparameters.csv</strong>, either generated from BO process or user-defined.
 
 
 <!-- ciation-->
