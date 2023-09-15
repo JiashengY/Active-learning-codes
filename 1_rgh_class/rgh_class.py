@@ -209,7 +209,7 @@ class rgh():
         ax.set_ylabel("PS")
         ax.set_xlabel(r"$2\pi \Delta/\lambda$")
         
-    def FFT_filter(self,lmax,lmin):
+    def FFT_filter(self,lmax,lmin): ##Sharp Fourier filtering surface 
         qx = np.linspace(-self.Nx/2, self.Nx/2-1, self.Nx)
         qz = np.linspace(-self.Nz/2, self.Nz/2-1, self.Nz)
         qx = qx * 2 * np.pi/self.Nx
@@ -361,11 +361,13 @@ class rgh():
             ax2.scatter(bin0,n0,marker="o",c="r")
 
         return np.concatenate((np.array([self.kt/self.k99,lambda_0,lambda_1]),n0,PSquerys),axis=None)
-def single_predict(file_path,model_num,Input):
+    
+
+def single_predict(file_path,model_num,Input):# predicting with single model (not recommended)
     Model=load_model(file_path+"/model"+str(model_num))
     return Model.predict(Input.reshape(1,-1),verbose=0)
 
-def collect_prediction(output):
+def collect_prediction(output):# Calback function for map_async
     global predict_train
     predict_train.append(output)
 

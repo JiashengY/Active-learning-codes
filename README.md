@@ -27,7 +27,7 @@ This repository is associated with the research article authored by J. Yang, A. 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The current project encompasses a collection of Python scripts, spanning tasks such as analyzing roughness statistics, performing Bayesian optimization for neural network architecture, and conducting ensemble neural network training using predefined architectures.
+The current project encompasses a collection of Python scripts, spanning tasks such as analyzing roughness statistics, performing Bayesian optimization for neural network architecture, training ensemble neural network using predefined NN architectures as well as conducting active learning.
 
 
 
@@ -45,7 +45,6 @@ The current project encompasses a collection of Python scripts, spanning tasks s
 <!-- GETTING STARTED -->
 
 ## Getting Started
-The present repository contains jupyter notbooks scripts.
 
 ### Prerequisites
 
@@ -99,11 +98,11 @@ Clone the repository
 ## Folders
 
 * #### rgh_class 
-This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
+  This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
 * #### Bayesian_optimization
-This folder contains BO routine **NeuralNetwork_BO.ipynb** for optimizing NN archeticture for the current task setup. Output file <strong>Hyperparameters_BO.csv</strong>
+  This folder contains jupyter notebook titled **NeuralNetwork_BO.ipynb** which is used for Bayesian Optimization (BO) of the neural network architecture. Consequently, the resulting optimized hyperparameters are documented in <strong>Hyperparameters_BO.csv</strong>.
 * #### enn_training
-This folder contains ENN training script **NeuralNetwork_train.ipynb** based on  user specified NN architecture documented in <strong>Hyperparameters.csv</strong>, either generated from BO process or user-defined. The trained ENN model members are stored in the folder **Models** at the same location.
+  This folder contains ENN training script titled **NeuralNetwork_train.ipynb**. The architecture of the members in ENN is based on the hyperparameters documented in <strong>Hyperparameters.csv</strong>, which is either generated from BO process or user-defined. The trained ENN model members are stored in the **Models** folder at the same location.
 
 
 
@@ -120,7 +119,7 @@ Create an instance of the rgh class:
 surface=rgh.rgh(x,z,y) # x,z are streamwise, spanwise coordinates, y is 2-D roughness map
 ```
 ### Attributes
-The **rgh** class calculates following attributes automatically once the instance is assigned:
+The **rgh** class provides following attributes:
 * **Lx**, **Lz** : Streamwise and spanwise extents of the roughness patch, respectively.
 * **kt** : Peak-to-trough height of the roughness
 * **k99** : 99% confidence interval of roughness PDF
@@ -135,26 +134,29 @@ The **rgh** class calculates following attributes automatically once the instanc
 ### Methods
 The **rgh** class provides the following methods:
 * **print_stat()** : Generate a table containing roughness statistical parameters
+  * Returns: a Pandas dataframe containing roughness statistical parameters
 * **show_surface(representation="2D")** : Plot surface geometry.
   * **representation** : String, showing the representation of roughness geometry either in "2D" or "3D".
 * **plot_PDF(n_bins=10,normalization=True)** : Present roughness height PDF, where:
-  * **n_bins**: integer, number of bins. 
-  * **normalization** : boolean, if the plot is noramalized to density.
+  * **n_bins**: Integer, number of bins. 
+  * **normalization** : Boolean, if the plot is noramalized to density.
 * **plot_PS(normalization=True,circular_average=False,moving_average=False)**: Present roughness height PS, where:
-  * **normalization** : boolean, if the PS is noramalized with root-mean-square roughness height. 
-  * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
-  * **moving_average=False**: Once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
-  * **n_iter**: number of moving averaging iterations.
+  * **normalization** : Boolean, if the PS is noramalized with root-mean-square roughness height. 
+  * **azimuthal_average**: Boolean, azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
+  * **moving_average**: Boolean, once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
+  * **n_iter**: Integer, number of moving averaging iterations.
 * **FFT_filter(lmax,lmin)**: Spectral filtering of the surface, **lmax**, **lmin** are the desired largest and smallest roughness wavelengths, respectively.
+  * Returns: filtered rgh instance
 * **get_model_input(lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3,do_plots=False)**: Generate input vector for the ML model proposed in the publication, where:
   * **lmax**: largest incorporated wavelength
   * **lmin**: smallest incorporated wavelength
-  * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
-  * **moving_average=False**: once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
+  * **azimuthal_average**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
+  * **moving_average**: once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
   * **do_plots**: plotting PDF and PS inputs with red markers.
+  * Returns: 1-d Numpy array for model input: $[k_t/k_{99},\lambda_0/k_{99},\lambda_1/k_{99},PDF_1, ..., PDF_{30}, PS_1, ..., PS_{30}]$
 ### Roughness prediction
-**predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
+**rgh.predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
 * **surface_input** is the input vector for the current model, this can be obtained by **get_model_input** method in **rgh** class. For instance:
 
 ```python
@@ -165,15 +167,15 @@ You can choose the model for prediction from the pop-up window:
 <img src="0_assets/Model_select.PNG" alt= “Model_selection_window” width="600">
 
 
-### Code examples
- Code example of applying **rgh** class can be found in the jupyter notbook **1_rgh_class/Class_Example.ipynb**
+### Application examples
+ Application example of **rgh** class can be found in the jupyter notbook **1_rgh_class/Class_Example.ipynb**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- ciation-->
 ## Citation
-
+If you find this project usful, please cite:
 ```
 @misc{yang2023prediction,
       title={Prediction of equivalent sand-grain size and identification of drag-relevant scales of roughness -- a data driven approach}, 
