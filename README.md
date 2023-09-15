@@ -12,16 +12,9 @@ This repository is associated with the research article authored by J. Yang, A. 
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-            <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#Folders">Folders</a></li>
     <li><a href="#usage">Usage</a></li>
@@ -144,22 +137,22 @@ The **rgh** class provides the following methods:
 * **print_stat()** : Generate a table containing roughness statistical parameters
 * **show_surface(representation="2D")** : Plot surface geometry.
   * **representation** : String, showing the representation of roughness geometry either in "2D" or "3D".
-* **plot_PDF(n_bins=10,Normalization=True)** : Present roughness height PDF, where:
+* **plot_PDF(n_bins=10,normalization=True)** : Present roughness height PDF, where:
   * **n_bins**: integer, number of bins. 
-  * **Normalization** : boolean, if the plot is noramalized to density.
-* **plot_PS(Normalization=True,circular_average=False,moving_average=False)**: Present roughness height PS, where:
-  * **Normalization** : boolean, if the PS is noramalized with root-mean-square roughness height. 
+  * **normalization** : boolean, if the plot is noramalized to density.
+* **plot_PS(normalization=True,circular_average=False,moving_average=False)**: Present roughness height PS, where:
+  * **normalization** : boolean, if the PS is noramalized with root-mean-square roughness height. 
   * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
   * **moving_average=False**: Once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
 * **FFT_filter(lmax,lmin)**: Spectral filtering of the surface, **lmax**, **lmin** are the desired largest and smallest roughness wavelengths, respectively.
-* **get_model_input(lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3)**: Generate input vector for the ML model proposed in the publication, where:
+* **get_model_input(lmax=2,lmin=0.04,azimuthal_average=False,moving_average=False,n_iter=3,do_plots=False)**: Generate input vector for the ML model proposed in the publication, where:
   * **lmax**: largest incorporated wavelength
   * **lmin**: smallest incorporated wavelength
   * **azimuthal_average=False**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
-  * **moving_average=False**: Once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
+  * **moving_average=False**: once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
-
+  * **do_plots**: plotting PDF and PS inputs with red markers.
 ### Roughness prediction
 **predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
 * **surface_input** is the input vector for the current model, this can be obtained by **get_model_input** method in **rgh** class. For instance:

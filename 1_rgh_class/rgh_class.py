@@ -98,11 +98,11 @@ class rgh():
                 "ES_z":[self.ESz],"Inc_x":[self.incx],"Inc_z":[self.incz]}).style.hide(axis='index')
     
 
-    def plot_PDF(self,n_bins=10,Normalization=True): ## Plotting roughness PDF with desired number of bins
-        plt.hist(np.reshape(self.y,(-1)),bins=n_bins,density=Normalization)
+    def plot_PDF(self,n_bins=10,normalization=True): ## Plotting roughness PDF with desired number of bins
+        plt.hist(np.reshape(self.y,(-1)),bins=n_bins,density=normalization)
 
 
-    def plot_PS(self,Normalization=True,azimuthal_average=False,moving_average=False,n_iter=3): ## Plotting roughness PS with desired setting
+    def plot_PS(self,normalization=True,azimuthal_average=False,moving_average=False,n_iter=3): ## Plotting roughness PS with desired setting
         if (azimuthal_average==False) & (moving_average==True): ## Always do azimuthal average before moving average
             print("moving average only applicable for azimuthal_average=True, thus azimuthal_average is automatically set to True")
             azimuthal_average=True
@@ -117,7 +117,7 @@ class rgh():
         q_radius = np.sqrt(qxM**2 + qzM**2)
 
         # compute absolute value of power spectral density (imaginary part is not zero)
-        if Normalization==True:
+        if normalization==True:
             self.PS[0,0]=0
             PS_toplot = abs(self.PS)**2/(np.sum(abs(self.PS)**2)/(self.Nx*self.Nz))
         else:
