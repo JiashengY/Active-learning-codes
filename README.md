@@ -142,7 +142,7 @@ The **rgh** class provides the following methods:
 * **plot_PDF(n_bins=10,normalization=True)** : Present roughness height PDF, where:
   * **n_bins**: Integer, number of bins. 
   * **normalization** : Boolean, if the plot is noramalized to density.
-* **plot_PS(normalization=True,circular_average=False,moving_average=False)**: Present roughness height PS, where:
+* **plot_PS(normalization=True,circular_average=False,moving_average=False,n_iter=3)**: Present roughness height PS, where:
   * **normalization** : Boolean, if the PS is noramalized with root-mean-square roughness height. 
   * **azimuthal_average**: Boolean, azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
   * **moving_average**: Boolean, once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
@@ -155,7 +155,7 @@ The **rgh** class provides the following methods:
   * **azimuthal_average**: azimuthally averaged PS around origin of spectral space i.e. (qx,qz)=(0,0), to acquire 1-d PS. 
   * **moving_average**: once azimuthal average is done, moving average over 1-d PS can be carried out on demand. 
   * **n_iter**: number of moving averaging iterations.
-  * **do_plots**: plotting PDF and PS inputs with red markers.
+  * **do_plots**: plotting input elements for ML model corresponding to PDF and PS.
   * Returns: 1-d Numpy array for model input: $[k_t/k_{99},\lambda_0/k_{99},\lambda_1/k_{99},PDF_1, ..., PDF_{30}, PS_1, ..., PS_{30}]$
 ### Roughness prediction
 **rgh.predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
