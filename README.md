@@ -158,7 +158,7 @@ The **rgh** class provides the following methods:
   * **do_plots**: plotting input elements for ML model corresponding to PDF and PS.
   * Returns: 1-d Numpy array for model input: $[k_t/k_{99},\lambda_0/k_{99},\lambda_1/k_{99},PDF_1, ..., PDF_{30}, PS_1, ..., PS_{30}]$
 ### Roughness prediction
-**rgh.predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs with the ensemble neural network. The prediction process is parallelized on **n_p** CPUs.
+**rgh.predict(surface_input,n_models=50,n_p=4)** is the function to predict given inputs, i.e. **surface_input**, with the ensemble neural network comprising **n_models** number of model members. The prediction process is parallelized on **n_p** CPUs.
 * **surface_input** is the input vector for the current model, this can be obtained by **get_model_input** method in **rgh** class. For instance:
 
 ```python
