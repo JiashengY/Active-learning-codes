@@ -98,11 +98,11 @@ Clone the repository
 ## Folders
 
 * #### rgh_class 
-  This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
+  This folder contains roughness class **rgh**, **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis as well as conducing ML-prediction.
 * #### Bayesian_optimization
-  This folder contains jupyter notebook titled **NeuralNetwork_BO.ipynb** which is used for Bayesian Optimization (BO) of the neural network architecture. Consequently, the resulting optimized hyperparameters are documented in <strong>Hyperparameters_BO.csv</strong>.
+  This folder contains jupyter notebook titled **NeuralNetwork_BO.ipynb** which is used for Bayesian Optimization (BO) of the neural network architecture. Consequently, the optimized hyperparameters are documented in <strong>Hyperparameters_BO.csv</strong>.
 * #### enn_training
-  This folder contains ENN training script titled **NeuralNetwork_train.ipynb**. The architecture of the members in ENN is based on the hyperparameters documented in <strong>Hyperparameters.csv</strong>, which is either generated from BO process or user-defined. The trained ENN model members are stored in the **Models** folder at the same location.
+  This folder contains ENN training script titled **NeuralNetwork_train.ipynb**. The architecture of the members within the ENN is constructed based on the hyperparameters specified in <strong>Hyperparameters.csv</strong>, which can either be generated through the above BO process or user-defined. The trained ENN model members are stored in the **Models** sub-directory at the same location.
 
 
 
@@ -110,7 +110,9 @@ Clone the repository
 ## Usage
 ### rgh Python class
 **rgh** is a Python class that provides a convenient and efficient way to perform a variety of operations related to roughness analysis.
-You can move the rgh_class.py file from this repository and place it in your project directory. Import **rgh** class:
+You can move the rgh_class.py file from this repository and place it in your project directory. 
+
+Import **rgh** class:
 ```python 
 import rgh_class as rgh
 ```
