@@ -166,6 +166,7 @@ import multiprocessing as mp
 prediction=rgh.predict(surface.get_model_input(),n_p=mp.cpu_count())
 ```
 You can choose the model for prediction from the pop-up window:
+
 <img src="0_assets/Model_select.PNG" alt= “Model_selection_window” width="600">
 
 
