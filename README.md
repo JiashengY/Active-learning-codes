@@ -76,12 +76,17 @@ Python 3.8 along with following Python packages are required for running the cod
 
 * scikit-learn
   ```bash
-    pip3 install -U scikit-learn==1.0.2
+    pip3 install scikit-learn==1.0.2
   ```
 * scikit-optimize
   ```bash
     pip3 install scikit-optimize==0.9.0
   ```
+Or
+use the requirements file
+```bash
+    pip3 install -r requirements.txt
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
