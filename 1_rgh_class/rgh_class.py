@@ -69,8 +69,10 @@ class rgh():
                 flag=1
             if (s>1-C_I/2) & (flag==1):
                 UBound=self.bin99[i]
+                flag=2
                 break
-        
+        if flag!=2:
+            UBound=self.bin99[-1]
         
         self.k99=UBound-LBound
 
