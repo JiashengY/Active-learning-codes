@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1,'../../1_rgh_class')
+sys.path.insert(1,'./1_rgh_class')
 import rgh_class as rgh
 import numpy as np
 
